@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Build output (Cloudflare regenerates via `npm run build` → `prebuild` icons)
+dist/
+
+# Generated PWA icons (written by scripts/gen-icons.mjs on every build)
+public/icons/
+
+# Editor / OS noise
+.DS_Store
+*.local
+.vscode/
+.idea/

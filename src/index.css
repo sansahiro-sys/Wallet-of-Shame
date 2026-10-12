@@ -1,0 +1,302 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0a0708;
+  --color-ink-2: #130e10;
+  --color-ink-3: #1c1416;
+  --color-crimson: #a4161a;
+  --color-crimson-dark: #6e1418;
+  --color-crimson-hi: #d6283a;
+  --color-bone: #e8e3d9;
+  --color-ash: #9c948c;
+  /* Sunken chip / inset background — flipped by the light theme. */
+  --color-sunk: rgba(0, 0, 0, 0.32);
+  /* Modal scrim. */
+  --color-scrim: rgba(0, 0, 0, 0.75);
+  /* Text that always sits on a crimson fill, in both themes. */
+  --color-on-accent: #ffffff;
+  --font-display: "Cinzel", "Times New Roman", serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    -webkit-tap-highlight-color: transparent;
+    background-image:
+      radial-gradient(130% 55% at 50% -12%, rgba(164, 22, 26, 0.18), transparent 62%),
+      radial-gradient(90% 40% at 50% 112%, rgba(164, 22, 26, 0.09), transparent 62%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: rgba(164, 22, 26, 0.5);
+  }
+
+  input,
+  button,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8);
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .panel {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+  }
+
+  .panel-highlight {
+    border-color: rgba(164, 22, 26, 0.45);
+    box-shadow:
+      0 0 0 1px rgba(164, 22, 26, 0.1),
+      0 14px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .label {
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ash);
+  }
+
+  .input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    color: var(--color-bone);
+    outline: none;
+  }
+
+  .input:focus {
+    border-color: rgba(164, 22, 26, 0.85);
+    box-shadow: 0 0 0 3px rgba(164, 22, 26, 0.22);
+  }
+
+  .input::placeholder {
+    color: rgba(156, 148, 140, 0.65);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition:
+      transform 0.08s ease,
+      filter 0.15s ease;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: linear-gradient(180deg, #c8202c, #8d1216);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow:
+      0 8px 24px rgba(164, 22, 26, 0.38),
+      inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  }
+
+  .btn-primary:hover {
+    filter: brightness(1.08);
+  }
+
+  .btn-ghost {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    color: var(--color-bone);
+  }
+
+  .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  .btn-danger {
+    background: rgba(164, 22, 26, 0.14);
+    border: 1px solid rgba(255, 90, 90, 0.35);
+    color: #ff8a8a;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+@layer utilities {
+  .anim-sheet {
+    animation: sheet-up 0.22s cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+
+  .anim-fade {
+    animation: fade-in 0.18s ease-out;
+  }
+
+  .anim-toast {
+    animation: toast-in 0.25s cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+
+  .glow-crimson {
+    text-shadow: 0 0 26px rgba(214, 40, 52, 0.55);
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes ember-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------- *
+ * Light theme.                                                            *
+ *                                                                         *
+ * Every surface in the app is built from the tokens in @theme, so swapping *
+ * the values on <html> repaints the whole app: `bg-white/6` (which is just *
+ * an overlay of --color-white) becomes a faint dark wash on paper, and     *
+ * text-bone turns into ink. Unlayered rules beat the layered base above.   *
+ * ---------------------------------------------------------------------- */
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --color-ink: #f4f1ea;
+  --color-ink-2: #fbfaf7;
+  --color-ink-3: #ece7dd;
+  --color-bone: #16110e;
+  --color-ash: #6d645d;
+  --color-crimson: #8f1216;
+  --color-crimson-dark: #5e0d11;
+  --color-crimson-hi: #b3121f;
+  --color-white: #1a1512;
+  --color-sunk: rgba(23, 19, 15, 0.06);
+  --color-scrim: rgba(26, 21, 18, 0.42);
+}
+
+html[data-theme="light"] body {
+  background-image:
+    radial-gradient(130% 55% at 50% -12%, rgba(164, 22, 26, 0.09), transparent 62%),
+    radial-gradient(90% 40% at 50% 112%, rgba(164, 22, 26, 0.05), transparent 62%);
+}
+
+html[data-theme="light"] ::selection {
+  background: rgba(164, 22, 26, 0.22);
+}
+
+html[data-theme="light"] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: none;
+}
+
+html[data-theme="light"] .panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.62));
+  border-color: rgba(20, 15, 12, 0.1);
+}
+
+html[data-theme="light"] .panel-highlight {
+  box-shadow:
+    0 0 0 1px rgba(164, 22, 26, 0.12),
+    0 14px 34px rgba(48, 30, 24, 0.12);
+}
+
+html[data-theme="light"] .input {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(20, 15, 12, 0.16);
+}
+
+html[data-theme="light"] .input:focus {
+  border-color: rgba(164, 22, 26, 0.85);
+  box-shadow: 0 0 0 3px rgba(164, 22, 26, 0.16);
+}
+
+html[data-theme="light"] .btn-ghost {
+  background: rgba(20, 15, 12, 0.05);
+  border-color: rgba(20, 15, 12, 0.12);
+}
+
+html[data-theme="light"] .btn-ghost:hover {
+  background: rgba(20, 15, 12, 0.09);
+}
+
+html[data-theme="light"] .btn-primary {
+  box-shadow:
+    0 8px 22px rgba(164, 22, 26, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+html[data-theme="light"] .btn-danger {
+  background: rgba(164, 22, 26, 0.08);
+  color: #a3121b;
+}
+
+html[data-theme="light"] .glow-crimson {
+  text-shadow: 0 0 18px rgba(179, 18, 31, 0.25);
+}
