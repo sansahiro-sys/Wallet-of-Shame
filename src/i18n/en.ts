@@ -18,6 +18,7 @@ export const en = {
   'common.add': 'Add',
   'common.close': 'Close',
   'common.edit': 'Edit',
+  'common.undo': 'Undo',
   'common.today': 'Today',
   'common.yesterday': 'Yesterday',
   'common.dh': 'DH',
@@ -96,6 +97,7 @@ export const en = {
   'add.toastImpulse': '−{n} {c} · about {d} days from {goal}',
   'add.toastPlain': '−{n} {c} logged',
   'add.toastSaved': '+{n} {c} set aside',
+  'add.undone': 'Expense removed',
 
   // Ledger
   'ledger.cycle': 'Cycle',

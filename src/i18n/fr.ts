@@ -20,6 +20,7 @@ export const fr: typeof en = {
   'common.add': 'Ajouter',
   'common.close': 'Fermer',
   'common.edit': 'Modifier',
+  'common.undo': 'Annuler',
   'common.today': "Aujourd'hui",
   'common.yesterday': 'Hier',
   'common.dh': 'DH',
@@ -105,6 +106,7 @@ export const fr: typeof en = {
   'add.toastImpulse': '−{n} {c} · environ {d} jours de {goal}',
   'add.toastPlain': '−{n} {c} enregistrés',
   'add.toastSaved': '+{n} {c} mis de côté',
+  'add.undone': 'Dépense supprimée',
 
   // Ledger
   'ledger.cycle': 'Cycle',

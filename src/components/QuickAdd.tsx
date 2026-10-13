@@ -13,12 +13,13 @@ import {
 import { fmtNum } from '../lib/format'
 import { todayISO } from '../lib/dates'
 import { symbolFor } from '../lib/currency'
+import type { ToastAction } from '../types'
 import { Icon } from './Icon'
 
 interface Props {
   initial?: Txn | null
   onClose: () => void
-  onToast: (msg: string) => void
+  onToast: (msg: string, action?: ToastAction) => void
 }
 
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', '⌫']
@@ -74,9 +75,10 @@ export function QuickAdd({ initial, onClose, onToast }: Props) {
     }
     const rec = { amount: amt, categoryId, impulse, note: note.trim() || undefined, date }
     setSaving(true)
+    let savedId: number
     try {
-      if (initial?.id != null) await db.txns.put({ ...initial, ...rec })
-      else await db.txns.add(rec)
+      if (initial?.id != null) savedId = await db.txns.put({ ...initial, ...rec })
+      else savedId = await db.txns.add(rec)
     } catch (err) {
       // Never fail silently: if the write did not land, say so and keep the
       // sheet open so nothing typed is lost.
@@ -86,6 +88,23 @@ export function QuickAdd({ initial, onClose, onToast }: Props) {
       return
     }
     setSaving(false)
+    // A fresh entry can be taken back with one tap — "saved by mistake" is
+    // a normal thing to do, not a trip to the ledger.
+    const undo: ToastAction | undefined =
+      initial?.id == null
+        ? {
+            label: t('common.undo'),
+            run: async () => {
+              try {
+                await db.txns.delete(savedId)
+                onToast(t('add.undone'))
+              } catch (err) {
+                console.error('could not undo the transaction', err)
+                onToast(t('storage.saveFailed'))
+              }
+            },
+          }
+        : undefined
     const goal = tradeoff?.goal
     if (goal && tradeoff.safe > 0) {
       onToast(
@@ -96,9 +115,10 @@ export function QuickAdd({ initial, onClose, onToast }: Props) {
               goal: goal.name,
             })
           : t('add.toastPlain', { n: fmtNum(amt) }),
+        undo,
       )
     } else {
-      onToast(t('add.toastPlain', { n: fmtNum(amt) }))
+      onToast(t('add.toastPlain', { n: fmtNum(amt) }), undo)
     }
     onClose()
   }

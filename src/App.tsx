@@ -3,7 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from './db'
 import { useI18n, type Dict } from './i18n'
 import { recoveredCount } from './lib/journal'
-import type { Tab, Txn } from './types'
+import type { Tab, ToastAction, Txn } from './types'
 import { Home } from './pages/Home'
 import { Ledger } from './pages/Ledger'
 import { Budgets } from './pages/Budgets'
@@ -38,20 +38,23 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('home')
   const prevTab = useRef<Tab>('home')
   const [sheet, setSheet] = useState<SheetState>(null)
-  const [toast, setToast] = useState<{ id: number; msg: string } | null>(null)
+  const [toast, setToast] = useState<{ id: number; msg: string; action?: ToastAction } | null>(
+    null,
+  )
 
   function go(next: Tab) {
     if (next !== 'settings') prevTab.current = next
     setTab(next)
   }
 
-  function showToast(msg: string) {
-    setToast({ id: Date.now() + Math.random(), msg })
+  function showToast(msg: string, action?: ToastAction) {
+    setToast({ id: Date.now() + Math.random(), msg, action })
   }
 
   useEffect(() => {
     if (!toast) return
-    const id = window.setTimeout(() => setToast(null), 4200)
+    // Toasts with an action (Undo) stay a little longer.
+    const id = window.setTimeout(() => setToast(null), toast.action ? 6000 : 4200)
     return () => window.clearTimeout(id)
   }, [toast])
 
@@ -186,7 +189,22 @@ export default function App() {
           className="anim-toast fixed left-1/2 z-50 w-[92%] max-w-md -translate-x-1/2"
           style={{ bottom: 'calc(9.5rem + env(safe-area-inset-bottom))' }}
         >
-          <div className="panel px-4 py-3 text-center text-sm text-bone">{toast.msg}</div>
+          <div className="panel flex items-center gap-3 px-4 py-3 text-sm text-bone">
+            <span className={toast.action ? 'flex-1' : 'w-full text-center'}>{toast.msg}</span>
+            {toast.action && (
+              <button
+                onClick={() => {
+                  const a = toast.action
+                  if (!a) return
+                  setToast(null)
+                  void a.run()
+                }}
+                className="shrink-0 font-semibold text-crimson-hi transition hover:text-bone"
+              >
+                {toast.action.label}
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -20,6 +20,7 @@ export const ar: typeof en = {
   'common.add': 'إضافة',
   'common.close': 'إغلاق',
   'common.edit': 'تعديل',
+  'common.undo': 'تراجع',
   'common.today': 'اليوم',
   'common.yesterday': 'أمس',
   'common.dh': 'درهم',
@@ -98,6 +99,7 @@ export const ar: typeof en = {
   'add.toastImpulse': '−{n} {c} · نحو {d} يوم من {goal}',
   'add.toastPlain': 'تم تسجيل −{n} {c}',
   'add.toastSaved': 'تمت إحالة +{n} {c} للادخار',
+  'add.undone': 'تم حذف المصروف',
 
   // Ledger
   'ledger.cycle': 'الدورة',

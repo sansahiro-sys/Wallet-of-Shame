@@ -67,6 +67,12 @@ export interface Settings {
   setupDone: boolean
 }
 
+/** An optional button on the save toast — currently just Undo. */
+export interface ToastAction {
+  label: string
+  run: () => void | Promise<void>
+}
+
 export interface Backup {
   version: 1
   exportedAt: string
