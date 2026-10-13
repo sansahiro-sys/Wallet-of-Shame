@@ -32,48 +32,70 @@ function chunk(type, data) {
 }
 
 // --- Colors ---------------------------------------------------------------
-const BG = [10, 7, 8]
-const BG_GLOW = [26, 10, 12]
-const CRIMSON = [164, 22, 26]
-const CRIMSON_HI = [214, 40, 52]
-const BONE = [232, 227, 217]
+const BG = [125, 32, 43] // deep burgundy tile
+const BG_EDGE = [94, 23, 34] // slightly darker toward the corners
+const IVORY = [247, 243, 235] // the wallet mark
 
-// --- Shape test: returns a color for a point, or null for background -------
+// --- Shape test: rounded-rect distance, for both body and clasp -----------
+function inRoundedRect(px, py, x0, y0, x1, y1, r) {
+  const cx = Math.max(x0 + r, Math.min(px, x1 - r))
+  const cy = Math.max(y0 + r, Math.min(py, y1 - r))
+  const dx = px - cx
+  const dy = py - cy
+  return dx * dx + dy * dy <= r * r
+}
+
+/** Fills `color` when p sits inside the outer rect but not the inner one. */
+function strokeRect(px, py, x0, y0, x1, y1, r, w) {
+  return (
+    inRoundedRect(px, py, x0, y0, x1, y1, r) &&
+    !inRoundedRect(px, py, x0 + w, y0 + w, x1 - w, y1 - w, Math.max(0.5, r - w))
+  )
+}
+
+/**
+ * The Moneta mark: a geometric wallet — a rounded body, a fold line across
+ * the top, and a clasp notch on the right edge with a small button.
+ * All coordinates are fractions of the icon, multiplied by `scale` (the
+ * maskable variant shrinks everything into the safe zone).
+ */
 function colorAt(x, y, size, scale) {
   const c = size / 2
-  const dx = x - c
-  const dy = y - c
-  const d = Math.hypot(dx, dy)
-
-  // faint radial glow behind everything
-  const glow = 1 - Math.min(1, d / (size * 0.55))
+  // gentle vertical gradient so the flat burgundy reads as a surface
+  const g = Math.max(0, Math.min(1, y / size))
   const bg = [
-    Math.round(BG[0] + (BG_GLOW[0] - BG[0]) * glow),
-    Math.round(BG[1] + (BG_GLOW[1] - BG[1]) * glow),
-    Math.round(BG[2] + (BG_GLOW[2] - BG[2]) * glow),
+    Math.round(BG[0] + (BG_EDGE[0] - BG[0]) * g),
+    Math.round(BG[1] + (BG_EDGE[1] - BG[1]) * g),
+    Math.round(BG[2] + (BG_EDGE[2] - BG[2]) * g),
   ]
 
-  // outer crimson ring
-  const ringR = size * 0.36 * scale
-  const ringW = size * 0.05 * scale
-  if (Math.abs(d - ringR) <= ringW / 2) {
-    // slight highlight on the upper-left arc
-    const angle = Math.atan2(dy, dx)
-    const hi = Math.max(0, Math.cos(angle - Math.PI * 1.25))
-    return [
-      Math.round(CRIMSON[0] + (CRIMSON_HI[0] - CRIMSON[0]) * hi),
-      Math.round(CRIMSON[1] + (CRIMSON_HI[1] - CRIMSON[1]) * hi),
-      Math.round(CRIMSON[2] + (CRIMSON_HI[2] - CRIMSON[2]) * hi),
-    ]
+  // normalized point relative to center, scaled into the safe zone
+  const u = ((x - c) / (size / 2)) / scale
+  const v = ((y - c) / (size / 2)) / scale
+
+  const px = u * 0.5 + 0.5 // 0..1
+  const py = v * 0.5 + 0.5
+
+  const SW = 0.045 // stroke thickness
+
+  // wallet body: rounded rect
+  const body = { x0: 0.2, y0: 0.32, x1: 0.8, y1: 0.72, r: 0.075 }
+  if (strokeRect(px, py, body.x0, body.y0, body.x1, body.y1, body.r, SW)) return IVORY
+
+  // fold line: a thin band just under the top edge
+  if (px > body.x0 + SW * 0.5 && px < body.x1 - SW * 0.5 && py > 0.42 && py < 0.42 + SW) {
+    return IVORY
   }
 
-  // diamond (taxed coin) in the center
-  const diamondR = size * 0.17 * scale
-  if (Math.abs(dx) + Math.abs(dy) <= diamondR) {
-    // inner bone-colored notch
-    if (Math.abs(dx) + Math.abs(dy) <= diamondR * 0.45) return BONE
-    return CRIMSON
+  // clasp: small rounded rect hanging off the right edge, hollowed out
+  const clasp = { x0: 0.6, y0: 0.5, x1: 0.86, y1: 0.63, r: 0.05 }
+  if (strokeRect(px, py, clasp.x0, clasp.y0, clasp.x1, clasp.y1, clasp.r, SW * 0.85)) {
+    return IVORY
   }
+  // button dot inside the clasp
+  const bdx = px - 0.755
+  const bdy = py - 0.565
+  if (bdx * bdx + bdy * bdy <= 0.022 * 0.022) return IVORY
 
   return bg
 }

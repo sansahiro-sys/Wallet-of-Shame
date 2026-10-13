@@ -6,6 +6,7 @@ import type { Tab, Txn } from '../types'
 import { catName, getCycle } from '../lib/finance'
 import { fmtDate } from '../lib/format'
 import { todayISO } from '../lib/dates'
+import { Icon } from '../components/Icon'
 
 interface Props {
   onEdit: (txn: Txn) => void
@@ -70,8 +71,8 @@ export function Ledger({ onEdit }: Props) {
 
       {groups.length === 0 ? (
         <div className="panel flex flex-col items-center gap-2 px-5 py-10 text-center">
-          <div className="text-4xl">📜</div>
-          <div className="font-display text-lg text-bone">{t('ledger.empty')}</div>
+          <Icon name="ledger" className="h-8 w-8 text-ash" />
+          <div className="text-lg font-semibold text-bone">{t('ledger.empty')}</div>
           <p className="text-sm text-ash">{t('ledger.emptySub')}</p>
         </div>
       ) : (
@@ -97,11 +98,15 @@ export function Ledger({ onEdit }: Props) {
                       onClick={() => onEdit(tx)}
                       className="flex w-full items-center gap-3 px-4 py-3 text-start transition hover:bg-white/4"
                     >
-                      <span className="text-xl">{c?.emoji ?? '❓'}</span>
+                      <span className="text-xl">{c?.emoji ?? '·'}</span>
                       <div className="min-w-0 flex-1">
                         <div className="truncate text-sm text-bone">
                           {c ? catName(c, lang) : '—'}
-                          {tx.impulse && <span className="ms-1.5 text-crimson-hi">⚡</span>}
+                          {tx.impulse && (
+                            <span className="ms-1.5 text-[10px] text-crimson-hi">
+                              {t('add.impulse')}
+                            </span>
+                          )}
                         </div>
                         {tx.note && <div className="truncate text-xs text-ash">{tx.note}</div>}
                       </div>

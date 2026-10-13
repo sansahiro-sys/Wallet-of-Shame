@@ -38,7 +38,7 @@ export function Sheet({ open, onClose, title, children }: Props) {
       <div className="anim-sheet relative max-h-[92vh] w-full max-w-md overflow-y-auto rounded-t-3xl border-t border-crimson/40 bg-ink-2 pb-8 shadow-[0_-24px_60px_rgba(0,0,0,0.8)]">
         <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-white/5 bg-ink-2/95 px-4 pb-3 pt-4 backdrop-blur">
           <div className="absolute left-1/2 top-1.5 h-1 w-10 -translate-x-1/2 rounded-full bg-white/15" />
-          <h2 className="mt-1 font-display text-lg text-bone">{title}</h2>
+          <h2 className="mt-1 text-lg font-semibold text-bone">{title}</h2>
           <button
             onClick={onClose}
             aria-label={t('common.close')}

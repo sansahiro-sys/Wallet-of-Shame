@@ -112,7 +112,7 @@ export function Goals({ onToast }: Props) {
 
       {goals.length === 0 ? (
         <div className="panel flex flex-col items-center gap-3 px-5 py-10 text-center">
-          <div className="text-4xl">🎯</div>
+          <Icon name="goals" className="h-8 w-8 text-ash" />
           <p className="text-sm text-ash">{t('goals.empty')}</p>
           <button className="btn btn-primary" onClick={() => setAddOpen(true)}>
             <Icon name="plus" className="h-4 w-4" />
@@ -128,7 +128,7 @@ export function Goals({ onToast }: Props) {
               <section key={g.id} className="panel p-4">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <h3 className="truncate font-display text-lg text-bone">{g.name}</h3>
+                    <h3 className="truncate text-lg font-semibold text-bone">{g.name}</h3>
                     <div className="text-xs text-ash tabular">
                       {money(stats.saved)} / {money(g.target)} · {t('goals.setAside')}
                     </div>
@@ -144,11 +144,7 @@ export function Goals({ onToast }: Props) {
 
                 <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-white/8">
                   <div
-                    className={`h-full rounded-full ${
-                      done
-                        ? 'bg-gradient-to-r from-bone/70 to-bone'
-                        : 'bg-gradient-to-r from-crimson-dark to-crimson-hi'
-                    }`}
+                    className={`h-full rounded-full ${done ? 'bg-bone/60' : 'bg-crimson'}`}
                     style={{ width: `${stats.pct}%` }}
                   />
                 </div>
@@ -222,7 +218,7 @@ export function Goals({ onToast }: Props) {
               setGError(null)
             }}
           />
-          {gError && <div className="text-sm text-crimson-hi">⚠ {gError}</div>}
+          {gError && <div className="text-sm text-crimson-hi">{gError}</div>}
           <button className="btn btn-primary" onClick={addGoal}>
             {t('common.save')}
           </button>

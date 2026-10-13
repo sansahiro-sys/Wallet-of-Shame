@@ -122,10 +122,8 @@ export function QuickAdd({ initial, onClose, onToast }: Props) {
       <div className="panel panel-highlight px-4 py-3">
         <div className="label mb-1">{t('add.amount')}</div>
         <div className="flex items-baseline justify-end gap-2" dir="ltr">
-          <span className="font-display text-5xl text-bone glow-crimson tabular">
-            {amount || '0'}
-          </span>
-          <span className="font-display text-xl text-ash">{symbolFor(cur, lang)}</span>
+          <span className="text-5xl font-semibold text-bone tabular">{amount || '0'}</span>
+          <span className="text-xl text-ash">{symbolFor(cur, lang)}</span>
         </div>
       </div>
 
@@ -134,7 +132,7 @@ export function QuickAdd({ initial, onClose, onToast }: Props) {
           <button
             key={k}
             onClick={() => press(k)}
-            className="rounded-xl border border-white/8 bg-white/5 py-3 font-display text-xl text-bone transition active:bg-crimson/40 hover:bg-white/8"
+            className="rounded-xl border border-white/8 bg-white/5 py-3 text-xl font-medium text-bone transition hover:bg-white/8 active:bg-crimson/40"
           >
             {k}
           </button>
@@ -156,7 +154,7 @@ export function QuickAdd({ initial, onClose, onToast }: Props) {
                 }}
                 className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition ${
                   selected
-                    ? 'border-crimson bg-crimson/85 text-on-accent shadow-[0_4px_14px_rgba(164,22,26,0.45)]'
+                    ? 'border-crimson bg-crimson text-on-accent'
                     : 'border-white/12 bg-white/5 text-bone hover:bg-white/10'
                 }`}
               >
@@ -176,21 +174,21 @@ export function QuickAdd({ initial, onClose, onToast }: Props) {
             onClick={() => setImpulse(false)}
             className={`rounded-xl border py-2.5 text-sm font-semibold transition ${
               !impulse
-                ? 'border-bone/40 bg-bone/12 text-bone'
+                ? 'border-white/25 bg-white/12 text-bone'
                 : 'border-white/10 bg-white/4 text-ash hover:bg-white/8'
             }`}
           >
-            ⚖ {t('add.necessity')}
+            {t('add.necessity')}
           </button>
           <button
             onClick={() => setImpulse(true)}
             className={`rounded-xl border py-2.5 text-sm font-semibold transition ${
               impulse
-                ? 'border-crimson bg-crimson/85 text-on-accent shadow-[0_4px_14px_rgba(164,22,26,0.45)]'
+                ? 'border-crimson bg-crimson text-on-accent'
                 : 'border-white/10 bg-white/4 text-ash hover:bg-white/8'
             }`}
           >
-            ⚡ {t('add.impulse')}
+            {t('add.impulse')}
           </button>
         </div>
       </div>
@@ -216,7 +214,7 @@ export function QuickAdd({ initial, onClose, onToast }: Props) {
         </div>
       </div>
 
-      {error && <div className="text-sm text-crimson-hi">⚠ {error}</div>}
+      {error && <div className="text-sm text-crimson-hi">{error}</div>}
 
       <div className="flex gap-2">
         <button

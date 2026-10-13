@@ -32,11 +32,11 @@ const PAGE_H = 1684
 const M = 88
 const CW = PAGE_W - 2 * M
 
-const PAPER = '#f7f4ee'
-const INK = '#17130f'
-const MUTED = '#736a62'
-const LINE = '#e0d9cc'
-const CRIMSON = '#a4161a'
+const PAPER = '#f7f3eb'
+const INK = '#1f1d1a'
+const MUTED = '#6f6a64'
+const LINE = '#e4ddd0'
+const CRIMSON = '#7d202b'
 const CARD = '#ffffff'
 const CHIP = '#efe9df'
 
@@ -179,15 +179,25 @@ class Painter {
     }
   }
 
-  /** The rotated crimson diamond that opens every page. */
+  /** The burgundy wallet mark that opens every page. */
   logo(x: number, y: number): void {
     const ctx = this.ctx
     ctx.save()
     ctx.translate(x, y)
-    ctx.rotate(Math.PI / 4)
     ctx.strokeStyle = CRIMSON
-    ctx.lineWidth = 5
-    ctx.strokeRect(-15, -15, 30, 30)
+    ctx.lineWidth = 4
+    ctx.lineJoin = 'round'
+    // wallet body
+    roundPath(ctx, { x: -22, y: -14, w: 44, h: 30 }, 6)
+    ctx.stroke()
+    // card slot on the right edge
+    ctx.beginPath()
+    ctx.moveTo(22, 0)
+    ctx.lineTo(9, 0)
+    ctx.arcTo(4, 0, 4, 6, 5)
+    ctx.lineTo(4, 6)
+    ctx.lineTo(22, 6)
+    ctx.stroke()
     ctx.restore()
   }
 
@@ -330,10 +340,10 @@ export async function exportReport(period: ReportPeriod): Promise<boolean> {
 
   // --- Header ------------------------------------------------------------
   const logoY = p.y + 14
-  p.logo(M + 22, logoY + 20)
-  p.fillText('Wallet of Shame', M + 58, logoY, { size: 32, weight: 700, display: true })
+  p.logo(M + 24, logoY + 20)
+  p.fillText('Moneta', M + 62, logoY, { size: 32, weight: 700, display: true })
   const periodLabel = d[period === 'week' ? 'report.periodWeek' : 'report.periodMonth']
-  p.fillText(`${d['report.title']} · ${periodLabel}`, M + 58, logoY + 44, {
+  p.fillText(`${d['report.title']} · ${periodLabel}`, M + 62, logoY + 44, {
     size: 17,
     color: MUTED,
   })
@@ -392,7 +402,6 @@ export async function exportReport(period: ReportPeriod): Promise<boolean> {
   p.fillText(roastTitle, roastBox.x + 28, roastBox.y + 16, {
     size: 21,
     weight: 700,
-    display: true,
   })
   roastLines.forEach((l, i) =>
     p.fillText(l, roastBox.x + 28, roastBox.y + 52 + i * 28, { size: 19, color: MUTED }),
@@ -402,7 +411,7 @@ export async function exportReport(period: ReportPeriod): Promise<boolean> {
 
   // --- Where it went -----------------------------------------------------
   if (breakdown.length > 0) {
-    p.text(d['report.byCategory'], 22, { weight: 700, display: true })
+    p.text(d['report.byCategory'], 22, { weight: 700 })
     p.space(4)
     for (const { cat, amount } of breakdown) {
       p.need(58)
@@ -428,7 +437,7 @@ export async function exportReport(period: ReportPeriod): Promise<boolean> {
   }
 
   // --- Entries, day by day ----------------------------------------------
-  p.text(d['report.entries'], 22, { weight: 700, display: true })
+  p.text(d['report.entries'], 22, { weight: 700 })
   p.space(4)
 
   const sorted = [...inPeriod].sort(
@@ -454,7 +463,7 @@ export async function exportReport(period: ReportPeriod): Promise<boolean> {
 
     const cat: Category | undefined = cats.find((k) => k.id === tx.categoryId)
     const label = cat ? catName(cat, lang) : '—'
-    const line = `${tx.impulse ? '⚡ ' : ''}${label}${tx.note ? ` — ${tx.note}` : ''}`
+    const line = `${tx.impulse ? '• ' : ''}${label}${tx.note ? ` — ${tx.note}` : ''}`
     p.need(44)
     p.fillText(p.ellipsize(line, CW - 230, 18), M, p.y, {
       size: 18,
@@ -487,11 +496,11 @@ export async function exportReport(period: ReportPeriod): Promise<boolean> {
     c.fillStyle = MUTED
     c.font = `400 14px ${SANS}`
     c.textAlign = 'left'
-    c.fillText(`Wallet of Shame · ${d['report.footer']}`, M, PAGE_H - M + 4)
+    c.fillText(`Moneta · ${d['report.footer']}`, M, PAGE_H - M + 4)
     c.textAlign = 'right'
     c.fillText(`${i + 1} / ${pages.length}`, PAGE_W - M, PAGE_H - M + 4)
   })
 
-  download(`wallet-of-shame-${period}-report-${today}.pdf`, assemblePdf(pageImages(pages)))
+  download(`moneta-${period}-report-${today}.pdf`, assemblePdf(pageImages(pages)))
   return true
 }

@@ -17,7 +17,7 @@ export { download }
 export async function exportBackup(): Promise<void> {
   const backup = await gather()
   download(
-    `wallet-of-shame-${todayISO()}.json`,
+    `moneta-${todayISO()}.json`,
     new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }),
   )
 }
@@ -77,7 +77,7 @@ export async function exportCsv(): Promise<void> {
     )
   }
   download(
-    `wallet-of-shame-${todayISO()}.csv`,
+    `moneta-${todayISO()}.csv`,
     new Blob([lines.join('\n')], { type: 'text/csv' }),
   )
 }

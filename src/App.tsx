@@ -68,17 +68,14 @@ export default function App() {
     document.documentElement.dataset.theme = theme
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', theme === 'light' ? '#f4f1ea' : '#0a0708')
+      ?.setAttribute('content', theme === 'light' ? '#f7f3eb' : '#171719')
   }, [theme])
 
   // Boot screen while the DB opens
   if (!settings) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4">
-        <div
-          className="h-10 w-10 rotate-45 border-2 border-crimson bg-crimson/30"
-          style={{ animation: 'ember-pulse 1.6s ease-in-out infinite' }}
-        />
+        <Icon name="wallet" className="h-9 w-9 text-crimson" />
         <div className="label">{t('boot.loading')}</div>
       </div>
     )
@@ -100,15 +97,13 @@ export default function App() {
               <Icon name="back" className="h-5 w-5 rtl:rotate-180" />
             </button>
           ) : (
-            <span className="flex h-8 w-8 items-center justify-center">
-              <span className="h-3.5 w-3.5 rotate-45 border-2 border-crimson bg-crimson/40" />
+            <span className="flex h-8 w-8 items-center justify-center text-crimson">
+              <Icon name="wallet" className="h-6 w-6" />
             </span>
           )}
           <div className="min-w-0 flex-1">
-            <h1 className="font-display text-[13px] uppercase tracking-[0.3em] text-bone">
-              Wallet of Shame
-            </h1>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-ash">
+            <h1 className="wordmark text-lg leading-none text-bone">Moneta</h1>
+            <div className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-ash">
               {t(SUBTITLE[tab])}
             </div>
           </div>
@@ -139,7 +134,7 @@ export default function App() {
           onClick={() => setSheet({ kind: 'add' })}
           aria-label={t('add.title')}
           style={{ bottom: 'calc(5rem + env(safe-area-inset-bottom))' }}
-          className="fixed left-1/2 z-40 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full border border-white/25 bg-gradient-to-b from-crimson-hi to-crimson-dark text-on-accent shadow-[0_12px_32px_rgba(164,22,26,0.55)] transition hover:brightness-110 active:scale-95"
+          className="fixed left-1/2 z-40 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full bg-crimson text-on-accent shadow-lg transition hover:bg-crimson-dark active:scale-95"
         >
           <Icon name="plus" className="h-7 w-7" />
         </button>
@@ -191,9 +186,7 @@ export default function App() {
           className="anim-toast fixed left-1/2 z-50 w-[92%] max-w-md -translate-x-1/2"
           style={{ bottom: 'calc(9.5rem + env(safe-area-inset-bottom))' }}
         >
-          <div className="panel panel-highlight px-4 py-3 text-center text-sm text-bone">
-            {toast.msg}
-          </div>
+          <div className="panel px-4 py-3 text-center text-sm text-bone">{toast.msg}</div>
         </div>
       )}
     </div>

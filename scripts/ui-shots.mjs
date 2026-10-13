@@ -70,7 +70,7 @@ async function addExpense(digits, category, impulse = false) {
     await page.waitForTimeout(60)
   }
   await page.locator('button', { hasText: category }).first().click()
-  if (impulse) await page.locator('button', { hasText: 'Impulse' }).first().click()
+  if (impulse) await page.locator('button', { hasText: 'Unplanned' }).first().click()
   await page.locator('button:has-text("Save")').click()
   await page.waitForTimeout(500)
 }

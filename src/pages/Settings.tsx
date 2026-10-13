@@ -5,7 +5,7 @@ import { useI18n } from '../i18n'
 import type { Lang, Profile, Theme } from '../types'
 import { eraseAll, exportBackup, exportCsv, importBackup, loadDemo } from '../lib/data'
 import { CURRENCIES, symbolFor } from '../lib/currency'
-import { PROFILE_EMOJI, PROFILES } from '../lib/finance'
+import { PROFILES } from '../lib/finance'
 import { exportReport, type ReportPeriod } from '../lib/pdf'
 import { Icon } from '../components/Icon'
 import { Sheet } from '../components/Sheet'
@@ -109,7 +109,7 @@ export function Settings({ onToast }: Props) {
               onClick={() => void updateSettings({ theme: th })}
               className={`${chip(settings.theme === th)} flex items-center justify-center gap-2 py-3`}
             >
-              <span>{th === 'dark' ? '🌙' : '☀️'}</span>
+              <Icon name={th === 'dark' ? 'moon' : 'sun'} className="h-4 w-4" />
               {t(th === 'dark' ? 'settings.themeDark' : 'settings.themeLight')}
             </button>
           ))}
@@ -145,10 +145,9 @@ export function Settings({ onToast }: Props) {
             <button
               key={p}
               onClick={() => void updateSettings({ profile: p })}
-              className={`${chip(settings.profile === p)} flex flex-col items-center gap-1 py-3`}
+              className={`${chip(settings.profile === p)} py-3`}
             >
-              <span className="text-xl">{PROFILE_EMOJI[p]}</span>
-              <span className="text-xs">{t(`profile.${p}`)}</span>
+              {t(`profile.${p}`)}
             </button>
           ))}
         </div>
@@ -164,7 +163,7 @@ export function Settings({ onToast }: Props) {
               <input
                 type="number"
                 inputMode="decimal"
-                className="input pe-16 text-end font-display text-xl"
+                className="input pe-16 text-end text-xl font-semibold"
                 value={allowance}
                 min={1}
                 onChange={(e) => setAllowance(e.target.value)}
@@ -219,10 +218,12 @@ export function Settings({ onToast }: Props) {
               onToast(t('settings.exported'))
             }}
           >
-            ↓ {t('settings.exportJson')}
+            <Icon name="download" className="h-4 w-4" />
+            {t('settings.exportJson')}
           </button>
           <button className={btn} onClick={() => fileRef.current?.click()}>
-            ↑ {t('settings.importJson')}
+            <Icon name="upload" className="h-4 w-4" />
+            {t('settings.importJson')}
           </button>
           <input
             ref={fileRef}
@@ -238,13 +239,16 @@ export function Settings({ onToast }: Props) {
               onToast(t('settings.csvExported'))
             }}
           >
-            ⇪ {t('settings.exportCsv')}
+            <Icon name="file" className="h-4 w-4" />
+            {t('settings.exportCsv')}
           </button>
           <button className={btn} onClick={onDemo}>
-            ✦ {t('settings.demo')}
+            <Icon name="sparkle" className="h-4 w-4" />
+            {t('settings.demo')}
           </button>
           <button className="btn btn-danger w-full justify-start text-start" onClick={onErase}>
-            ☠ {t('settings.erase')}
+            <Icon name="trash" className="h-4 w-4" />
+            {t('settings.erase')}
           </button>
         </div>
       </section>
@@ -259,7 +263,7 @@ export function Settings({ onToast }: Props) {
             disabled={reportBusy != null}
             onClick={() => onReport('week')}
           >
-            <span className="text-lg">{reportBusy === 'week' ? '…' : '📄'}</span>
+            <Icon name={reportBusy === 'week' ? 'sparkle' : 'file'} className="h-5 w-5" />
             {t('report.week')}
           </button>
           <button
@@ -267,7 +271,7 @@ export function Settings({ onToast }: Props) {
             disabled={reportBusy != null}
             onClick={() => onReport('month')}
           >
-            <span className="text-lg">{reportBusy === 'month' ? '…' : '🗂️'}</span>
+            <Icon name={reportBusy === 'month' ? 'sparkle' : 'file'} className="h-5 w-5" />
             {t('report.month')}
           </button>
         </div>
@@ -275,12 +279,12 @@ export function Settings({ onToast }: Props) {
 
       {/* About */}
       <section className="panel p-4">
-        <div className="label mb-2">{t('settings.aboutTitle')}</div>
-        <p className="text-sm text-ash">{t('settings.about')}</p>
-        <div className="mt-3 flex items-center gap-2 text-xs text-ash/70">
-          <Icon name="check" className="h-3.5 w-3.5" />
-          Wallet of Shame v1.0
+        <div className="mb-2 flex items-center gap-2">
+          <Icon name="wallet" className="h-4 w-4 text-crimson" />
+          <span className="wordmark text-sm text-bone">Moneta</span>
+          <span className="text-xs text-ash/70">v1.0</span>
         </div>
+        <p className="text-sm text-ash">{t('settings.about')}</p>
       </section>
 
       {/* New allowance flow */}

@@ -11,12 +11,12 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon-192.png'],
       manifest: {
-        name: 'Wallet of Shame',
-        short_name: 'Wallet',
+        name: 'Moneta',
+        short_name: 'Moneta',
         description:
-          'Local-first expense tracker: currency, themes, allowance countdown, weekly roasts, savings goals.',
-        theme_color: '#0a0708',
-        background_color: '#0a0708',
+          'Local-first expense tracker: currency, themes, allowance countdown, savings goals, printable reports.',
+        theme_color: '#171719',
+        background_color: '#171719',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',

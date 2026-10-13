@@ -5,7 +5,7 @@ import type { Lang, Profile } from '../types'
 import { addDaysISO, todayISO } from '../lib/dates'
 import { CURRENCIES, getCurrency, symbolFor } from '../lib/currency'
 import { fmtMoney } from '../lib/format'
-import { PROFILE_EMOJI, PROFILES } from '../lib/finance'
+import { PROFILES } from '../lib/finance'
 import { Icon } from './Icon'
 
 interface BillRow {
@@ -90,6 +90,13 @@ export function SetupWizard() {
     }
   }
 
+  const chip = (active: boolean) =>
+    `rounded-xl border px-4 py-3 transition ${
+      active
+        ? 'border-crimson bg-crimson/15 text-bone'
+        : 'border-white/10 bg-white/4 text-ash hover:bg-white/8'
+    }`
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-ink px-4 py-8">
       <div className="mx-auto flex min-h-full max-w-md flex-col justify-center">
@@ -101,7 +108,7 @@ export function SetupWizard() {
                 <span
                   key={i}
                   className={`h-1.5 rounded-full transition-all ${
-                    i <= step ? 'w-6 bg-crimson-hi' : 'w-3 bg-white/15'
+                    i <= step ? 'w-6 bg-crimson' : 'w-3 bg-white/15'
                   }`}
                 />
               ))}
@@ -112,11 +119,12 @@ export function SetupWizard() {
           {step === 0 && (
             <div className="flex flex-col gap-4">
               <div className="text-center">
-                <div className="mb-2 text-3xl">🕯️</div>
-                <h1 className="font-display text-2xl text-bone glow-crimson">
-                  {t('setup.welcome')}
-                </h1>
-                <p className="mt-2 text-sm text-ash">{t('setup.welcomeSub')}</p>
+                <div className="mb-3 flex justify-center text-crimson">
+                  <Icon name="wallet" className="h-10 w-10" />
+                </div>
+                <h1 className="wordmark text-2xl text-bone">{t('brand.name')}</h1>
+                <p className="mt-1.5 text-sm text-ash">{t('brand.tagline')}</p>
+                <p className="mt-3 text-sm text-ash">{t('setup.welcomeSub')}</p>
               </div>
               <div>
                 <div className="label mb-2">{t('setup.langTitle')}</div>
@@ -125,11 +133,7 @@ export function SetupWizard() {
                     <button
                       key={l.code}
                       onClick={() => setLang(l.code)}
-                      className={`flex items-center justify-between rounded-xl border px-4 py-3 transition ${
-                        lang === l.code
-                          ? 'border-crimson bg-crimson/20 text-bone'
-                          : 'border-white/10 bg-white/4 text-ash hover:bg-white/8'
-                      }`}
+                      className={`flex items-center justify-between ${chip(lang === l.code)}`}
                     >
                       <span className="font-medium">{l.native}</span>
                       <span className="text-xs uppercase tracking-widest">{l.label}</span>
@@ -143,7 +147,7 @@ export function SetupWizard() {
           {step === 1 && (
             <div className="flex flex-col gap-4">
               <div>
-                <h2 className="font-display text-xl text-bone">{t('setup.currencyTitle')}</h2>
+                <h2 className="text-xl font-semibold text-bone">{t('setup.currencyTitle')}</h2>
                 <p className="mt-1 text-sm text-ash">{t('setup.currencySub')}</p>
               </div>
               <select
@@ -160,7 +164,7 @@ export function SetupWizard() {
                 ))}
               </select>
               <div className="rounded-xl border border-white/10 bg-white/4 px-4 py-3 text-center">
-                <div className="font-display text-3xl text-bone tabular">
+                <div className="text-3xl font-semibold text-bone tabular">
                   {fmtMoney(1234, currency, lang)}
                 </div>
                 <div className="label mt-1">{picked.code} · {picked.names[lang]}</div>
@@ -171,7 +175,7 @@ export function SetupWizard() {
           {step === 2 && (
             <div className="flex flex-col gap-4">
               <div>
-                <h2 className="font-display text-xl text-bone">{t('setup.profileTitle')}</h2>
+                <h2 className="text-xl font-semibold text-bone">{t('setup.profileTitle')}</h2>
                 <p className="mt-1 text-sm text-ash">{t('setup.profileSub')}</p>
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -179,14 +183,13 @@ export function SetupWizard() {
                   <button
                     key={p}
                     onClick={() => setProfile(p)}
-                    className={`flex flex-col items-center gap-1.5 rounded-xl border px-3 py-4 transition ${
+                    className={`rounded-xl border px-3 py-4 text-sm font-medium transition ${
                       profile === p
-                        ? 'border-crimson bg-crimson/20 text-bone'
+                        ? 'border-crimson bg-crimson/15 text-bone'
                         : 'border-white/10 bg-white/4 text-ash hover:bg-white/8'
                     }`}
                   >
-                    <span className="text-2xl">{PROFILE_EMOJI[p]}</span>
-                    <span className="text-sm font-medium">{t(`profile.${p}`)}</span>
+                    {t(`profile.${p}`)}
                   </button>
                 ))}
               </div>
@@ -195,14 +198,14 @@ export function SetupWizard() {
 
           {step === 3 && (
             <div className="flex flex-col gap-4">
-              <h2 className="font-display text-xl text-bone">{t('setup.allowanceTitle')}</h2>
+              <h2 className="text-xl font-semibold text-bone">{t('setup.allowanceTitle')}</h2>
               <div>
                 <div className="label mb-1.5">{t('setup.allowanceLbl')}</div>
                 <div className="relative">
                   <input
                     type="number"
                     inputMode="decimal"
-                    className="input pe-16 text-end font-display text-2xl"
+                    className="input pe-16 text-end text-2xl font-semibold"
                     value={allowance}
                     min={1}
                     onChange={(e) => setAllowance(e.target.value)}
@@ -229,7 +232,7 @@ export function SetupWizard() {
           {step === 4 && (
             <div className="flex flex-col gap-4">
               <div>
-                <h2 className="font-display text-xl text-bone">{t('setup.billsTitle')}</h2>
+                <h2 className="text-xl font-semibold text-bone">{t('setup.billsTitle')}</h2>
                 <p className="mt-1 text-sm text-ash">{t('setup.billsSub')}</p>
               </div>
               <div className="flex flex-col gap-2">
@@ -265,7 +268,7 @@ export function SetupWizard() {
           {step === 5 && (
             <div className="flex flex-col gap-4">
               <div>
-                <h2 className="font-display text-xl text-bone">{t('setup.goalTitle')}</h2>
+                <h2 className="text-xl font-semibold text-bone">{t('setup.goalTitle')}</h2>
                 <p className="mt-1 text-sm text-ash">{t('setup.goalSub')}</p>
               </div>
               <input
@@ -287,7 +290,7 @@ export function SetupWizard() {
             </div>
           )}
 
-          {error && <div className="mt-4 text-sm text-crimson-hi">⚠ {error}</div>}
+          {error && <div className="mt-4 text-sm text-crimson-hi">{error}</div>}
 
           {/* Actions */}
           <div className="mt-6 flex items-center gap-3">

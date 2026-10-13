@@ -86,7 +86,7 @@ async function addExpense(digits, category, opts = {}) {
   await sheet().waitFor()
   for (const k of digits) await page.getByRole('button', { name: k, exact: true }).click()
   await page.locator('.anim-sheet button', { hasText: category }).first().click()
-  if (opts.impulse) await page.locator('.anim-sheet button', { hasText: 'Impulse' }).click()
+  if (opts.impulse) await page.locator('.anim-sheet button', { hasText: 'Unplanned' }).click()
   if (opts.note) await page.getByPlaceholder('What was it? (optional)').fill(opts.note)
   await sheet().locator('button', { hasText: 'Save' }).click()
   await sheet().waitFor({ state: 'detached' })
@@ -114,7 +114,7 @@ await page.locator('button:has-text("→")').click() // bills → goal
 await page.waitForTimeout(200)
 await page.locator('input').first().fill('Gaming PC')
 await page.locator('input[type=number]').fill('2000')
-await page.locator('button:has-text("Enter the ledger")').click()
+await page.locator('button:has-text("Open Moneta")').click()
 await page.waitForTimeout(1200)
 
 let s = await getSettings()
@@ -134,8 +134,8 @@ check('seeded six categories', cats.length === 6, `got ${cats.length}`)
 section('2. Persistence across reload')
 await page.reload({ waitUntil: 'networkidle' })
 await page.waitForTimeout(900)
-check('no wizard after setup', !(await page.locator('text=Welcome, soul').isVisible().catch(() => false)))
-check('home rendered', await page.locator('text=THIS WEEK\'S ROAST').or(page.locator("text=This week's roast")).first().isVisible())
+check('no wizard after setup', !(await page.locator('text=Your money, in balance.').isVisible().catch(() => false)))
+check('home rendered', await page.locator('text=This week').or(page.locator("text=This week")).first().isVisible())
 check('theme defaults to dark', (await page.getAttribute('html', 'data-theme')) === 'dark')
 
 // ==========================================================================
@@ -166,7 +166,7 @@ check('cycle scope counts 2', (await page.locator('text=/2 transactions/').count
 
 await page.locator('.panel.divide-y button').first().click() // newest row
 await sheet().waitFor()
-check('edit sheet shows the amount', (await sheet().locator('.font-display.text-5xl').textContent())?.trim() === '25')
+check('edit sheet shows the amount', (await sheet().locator('.text-5xl.font-semibold').textContent())?.trim() === '25')
 await page.getByRole('button', { name: '⌫', exact: true }).click()
 await page.getByRole('button', { name: '⌫', exact: true }).click()
 await page.getByRole('button', { name: '9', exact: true }).click()
@@ -420,7 +420,7 @@ s = await getSettings()
 check('erase emptied the ledger', txns.length === 0)
 check('erase re-seeded the categories', cats.length === 6, `got ${cats.length}`)
 check('erase restarts the setup', s.setupDone === false)
-check('the wizard is back', await page.locator('text=Welcome, soul').isVisible())
+check('the wizard is back', await page.locator('text=Your money, in balance.').isVisible())
 
 // ==========================================================================
 section('10. Wizard validation on a second pass')
@@ -438,7 +438,7 @@ await page.locator('button:has-text("→")').click()
 await page.waitForTimeout(200)
 await page.locator('button:has-text("→")').click()
 await page.waitForTimeout(200)
-await page.locator('button:has-text("Enter the ledger")').click()
+await page.locator('button:has-text("Open Moneta")').click()
 await page.waitForTimeout(1000)
 check('second setup landed', (await getSettings()).allowance === 700)
 
@@ -455,7 +455,7 @@ txns = await dump('txns')
 s = await getSettings()
 check('import restored the transactions', txns.length === 13, `got ${txns.length}`)
 check('import restored the settings', s.allowance === 1000 && s.currency === backup.settings.currency, JSON.stringify({ allowance: s.allowance, currency: s.currency }))
-check('import dismissed the wizard', !(await page.locator('text=Welcome, soul').isVisible().catch(() => false)))
+check('import dismissed the wizard', !(await page.locator('text=Your money, in balance.').isVisible().catch(() => false)))
 
 // a file that is not a backup is rejected without touching anything
 await page.locator('input[type=file]').setInputFiles({
@@ -482,7 +482,7 @@ await page.waitForTimeout(300)
 await page.locator('button:has-text("Light")').click()
 await page.waitForTimeout(300)
 check('light theme applied', (await page.getAttribute('html', 'data-theme')) === 'light')
-check('theme-color meta updated', (await page.getAttribute('meta[name="theme-color"]', 'content')) === '#f4f1ea')
+check('theme-color meta updated', (await page.getAttribute('meta[name="theme-color"]', 'content')) === '#f7f3eb')
 
 await page.locator('button:has-text("Français")').click()
 await page.waitForTimeout(400)
@@ -543,7 +543,7 @@ check('migration backfills profile', s.profile === 'student', `got ${s.profile}`
 check('migration keeps the old values', s.lang === 'fr' && s.allowance === 321 && s.setupDone === true, JSON.stringify(s))
 check(
   'app survived the migration',
-  await page.locator('h3', { hasText: "This week's roast" }).or(page.locator('h3')).first().isVisible().catch(() => false),
+  await page.locator('h3', { hasText: "This week" }).or(page.locator('h3')).first().isVisible().catch(() => false),
 )
 
 // ==========================================================================

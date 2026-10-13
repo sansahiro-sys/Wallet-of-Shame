@@ -133,7 +133,7 @@ export function Budgets() {
             <Icon name="plus" className="h-4 w-4" />
           </button>
         </div>
-        {billError && <div className="mt-1.5 text-xs text-crimson-hi">⚠ {billError}</div>}
+        {billError && <div className="mt-1.5 text-xs text-crimson-hi">{billError}</div>}
 
         {settings && (
           <div className="mt-3 rounded-lg bg-sunk px-3 py-2 text-xs text-ash tabular">
@@ -181,11 +181,7 @@ export function Budgets() {
                   <>
                     <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-white/8">
                       <div
-                        className={`h-full rounded-full ${
-                          over
-                            ? 'bg-gradient-to-r from-crimson to-crimson-hi'
-                            : 'bg-gradient-to-r from-crimson-dark to-crimson'
-                        }`}
+                        className={`h-full rounded-full ${over ? 'bg-crimson-hi' : 'bg-crimson'}`}
                         style={{ width: `${pct}%` }}
                       />
                     </div>

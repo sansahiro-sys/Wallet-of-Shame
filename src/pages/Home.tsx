@@ -20,11 +20,11 @@ interface Props {
   onAdd: () => void
 }
 
-const ROAST_STYLE: Record<RoastStatus, string> = {
-  died: 'border-s-crimson-hi/70 bg-crimson/12',
-  fire: 'border-s-crimson/70 bg-crimson/8',
-  greed: 'border-s-bone/50 bg-white/6',
-  clean: 'border-s-white/20 bg-white/4',
+const STATUS_STYLE: Record<RoastStatus, string> = {
+  died: 'border-s-crimson',
+  fire: 'border-s-crimson/70',
+  greed: 'border-s-bone/30',
+  clean: 'border-s-white/15',
 }
 
 export function Home({ onNavigate, onAdd }: Props) {
@@ -59,86 +59,80 @@ export function Home({ onNavigate, onAdd }: Props) {
     <div className="flex flex-col gap-4">
       {/* Hero: safe to spend */}
       <section className="panel panel-highlight relative overflow-hidden p-5">
-        <div className="pointer-events-none absolute -top-20 left-1/2 h-44 w-72 -translate-x-1/2 rounded-full bg-crimson/25 blur-3xl" />
-        <div className="relative">
-          <div className="flex items-center justify-between gap-2">
-            <span className="label">{headLine}</span>
-            <span className="text-xs text-ash tabular">{fmtDate(cyc.end, lang)}</span>
-          </div>
+        <div className="flex items-center justify-between gap-2">
+          <span className="label">{headLine}</span>
+          <span className="text-xs text-ash tabular">{fmtDate(cyc.end, lang)}</span>
+        </div>
 
-          {cyc.overdue ? (
-            <button onClick={() => onNavigate('settings')} className="mt-3 block w-full text-start">
-              <div className="font-display text-4xl text-bone glow-crimson tabular">
-                {money(fc.available)}
-              </div>
-              <div className="label mt-1.5">→ {t('home.openSettings')}</div>
-            </button>
-          ) : fc.available <= 0 ? (
-            <div className="mt-3">
-              <div className="font-display text-5xl leading-none text-crimson-hi glow-crimson tabular">
-                {money(0)}
-              </div>
-              <div className="label mt-2 text-crimson-hi">
-                {fc.overBy > 0 ? t('home.overBudget', { n: fmtNum(fc.overBy) }) : t('home.nothingLeft')}
-              </div>
+        {cyc.overdue ? (
+          <button onClick={() => onNavigate('settings')} className="mt-3 block w-full text-start">
+            <div className="text-4xl font-semibold text-bone tabular">{money(fc.available)}</div>
+            <div className="label mt-1.5">→ {t('home.openSettings')}</div>
+          </button>
+        ) : fc.available <= 0 ? (
+          <div className="mt-3">
+            <div className="text-5xl font-semibold leading-none text-crimson-hi tabular">
+              {money(0)}
             </div>
-          ) : (
-            <div className="mt-3">
-              <div className="flex items-end gap-2" dir="ltr">
-                <span className="font-display text-6xl leading-none text-bone glow-crimson tabular">
-                  {fmtNum(fc.safePerDay)}
-                </span>
-                <span className="mb-1.5 font-display text-2xl text-ash">{symbolFor(cur, lang)}</span>
-              </div>
-              <div className="label mt-2">{t('home.safeToSpend')}</div>
-            </div>
-          )}
-
-          {/* Depletion bar with time marker */}
-          <div className="mt-4">
-            <div className="relative h-2.5 overflow-visible rounded-full bg-white/8">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-crimson-dark to-crimson-hi"
-                style={{ width: `${Math.min(100, Math.max(0, fc.usedPct))}%` }}
-              />
-              <div
-                className="absolute -top-1 h-4.5 w-px bg-bone/80"
-                style={{ insetInlineStart: `${Math.min(100, Math.max(0, cyc.elapsedPct))}%` }}
-                title={t('home.timeGone', { n: cyc.elapsedPct })}
-              />
-            </div>
-            <div className="mt-2 flex justify-between text-[11px] text-ash tabular">
-              <span>{t('home.moneyUsed', { n: fc.usedPct })}</span>
-              <span>{t('home.timeGone', { n: cyc.elapsedPct })}</span>
+            <div className="label mt-2 text-crimson-hi">
+              {fc.overBy > 0 ? t('home.overBudget', { n: fmtNum(fc.overBy) }) : t('home.nothingLeft')}
             </div>
           </div>
-
-          {/* Stat chips */}
-          <div className="mt-4 grid grid-cols-4 gap-2 text-center">
-            {(
-              [
-                [t('home.available'), fmtNum(fc.available)],
-                [t('home.allowanceLbl'), fmtNum(settings.allowance)],
-                [t('home.spent'), fmtNum(fc.spent)],
-                [t('home.saved'), fmtNum(fc.saved)],
-              ] as [string, string][]
-            ).map(([label, value]) => (
-              <div key={label} className="rounded-lg bg-sunk py-2">
-                <div className="font-display text-sm text-bone tabular">{value}</div>
-                <div className="mt-0.5 text-[9px] uppercase tracking-widest text-ash">{label}</div>
-              </div>
-            ))}
+        ) : (
+          <div className="mt-3">
+            <div className="flex items-end gap-2" dir="ltr">
+              <span className="text-6xl font-semibold leading-none text-bone tabular">
+                {fmtNum(fc.safePerDay)}
+              </span>
+              <span className="mb-1.5 text-2xl font-medium text-ash">
+                {symbolFor(cur, lang)}
+              </span>
+            </div>
+            <div className="label mt-2">{t('home.safeToSpend')}</div>
           </div>
+        )}
+
+        {/* Depletion bar with time marker */}
+        <div className="mt-4">
+          <div className="relative h-2 overflow-visible rounded-full bg-white/8">
+            <div
+              className="h-full rounded-full bg-crimson"
+              style={{ width: `${Math.min(100, Math.max(0, fc.usedPct))}%` }}
+            />
+            <div
+              className="absolute -top-1 h-4 w-px bg-bone/60"
+              style={{ insetInlineStart: `${Math.min(100, Math.max(0, cyc.elapsedPct))}%` }}
+              title={t('home.timeGone', { n: cyc.elapsedPct })}
+            />
+          </div>
+          <div className="mt-2 flex justify-between text-[11px] text-ash tabular">
+            <span>{t('home.moneyUsed', { n: fc.usedPct })}</span>
+            <span>{t('home.timeGone', { n: cyc.elapsedPct })}</span>
+          </div>
+        </div>
+
+        {/* Stat chips */}
+        <div className="mt-4 grid grid-cols-4 gap-2 text-center">
+          {(
+            [
+              [t('home.available'), fmtNum(fc.available)],
+              [t('home.allowanceLbl'), fmtNum(settings.allowance)],
+              [t('home.spent'), fmtNum(fc.spent)],
+              [t('home.saved'), fmtNum(fc.saved)],
+            ] as [string, string][]
+          ).map(([label, value]) => (
+            <div key={label} className="rounded-lg bg-sunk py-2">
+              <div className="text-sm font-semibold text-bone tabular">{value}</div>
+              <div className="mt-0.5 text-[9px] uppercase tracking-widest text-ash">{label}</div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Weekly roast */}
-      <section className={`panel border-s-4 p-4 ${ROAST_STYLE[roast.status]}`}>
-        <div className="flex items-center justify-between gap-2">
-          <span className="label">{t('home.roastTitle')}</span>
-          <span className="text-lg">{roast.status === 'died' ? '💀' : roast.status === 'fire' ? '🔥' : roast.status === 'greed' ? '🏆' : '✨'}</span>
-        </div>
-        <h3 className="mt-1 font-display text-lg text-bone">
+      {/* Weekly summary */}
+      <section className={`panel border-s-4 p-4 ${STATUS_STYLE[roast.status]}`}>
+        <div className="label">{t('home.roastTitle')}</div>
+        <h3 className="mt-1 text-lg font-semibold text-bone">
           {t(`roast.${roast.status}.t` as 'roast.clean.t')}
         </h3>
         <p className="mt-1 text-sm text-ash">{t(roast.key)}</p>
@@ -170,9 +164,9 @@ export function Home({ onNavigate, onAdd }: Props) {
 
         {recent.length === 0 ? (
           <div className="panel flex flex-col items-center gap-3 px-5 py-8 text-center">
-            <div className="text-4xl">💀</div>
+            <Icon name="ledger" className="h-8 w-8 text-ash" />
             <div>
-              <div className="font-display text-lg text-bone">{t('home.emptyTitle')}</div>
+              <div className="text-lg font-semibold text-bone">{t('home.emptyTitle')}</div>
               <p className="mt-1 text-sm text-ash">{t('home.emptySub')}</p>
             </div>
             <button className="btn btn-primary" onClick={onAdd}>
@@ -186,11 +180,15 @@ export function Home({ onNavigate, onAdd }: Props) {
               const c = catMap.get(tx.categoryId)
               return (
                 <div key={tx.id} className="flex items-center gap-3 px-4 py-3">
-                  <span className="text-xl">{c?.emoji ?? '❓'}</span>
+                  <span className="text-xl">{c?.emoji ?? '·'}</span>
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-sm text-bone">
                       {c ? catName(c, lang) : '—'}
-                      {tx.impulse && <span className="ms-1.5 text-crimson-hi">⚡</span>}
+                      {tx.impulse && (
+                        <span className="ms-1.5 text-[10px] text-crimson-hi">
+                          {t('add.impulse')}
+                        </span>
+                      )}
                     </div>
                     {tx.note && <div className="truncate text-xs text-ash">{tx.note}</div>}
                   </div>

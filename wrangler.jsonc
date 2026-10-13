@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "wallet-of-shame",
+  "name": "moneta",
   "compatibility_date": "2026-10-13",
   // Static-assets-only Worker: serves the Vite build output, with SPA fallback.
   "assets": {

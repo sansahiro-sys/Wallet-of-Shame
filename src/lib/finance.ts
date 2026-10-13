@@ -141,14 +141,6 @@ export const PROFILE_RULES: Record<Profile, { impulseTolerance: number; saveRati
 
 export const PROFILES: Profile[] = ['student', 'employee', 'freelancer', 'business', 'retired']
 
-export const PROFILE_EMOJI: Record<Profile, string> = {
-  student: '🎓',
-  employee: '💼',
-  freelancer: '💻',
-  business: '🏪',
-  retired: '🌴',
-}
-
 export function getRoast(
   s: Settings,
   cyc: Cycle,

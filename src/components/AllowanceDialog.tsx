@@ -69,7 +69,6 @@ export function AllowanceDialog({ cycle, onClose, onToast }: Props) {
   if (arrived === false) {
     return (
       <div className="flex flex-col gap-4 text-center">
-        <div className="text-3xl">⏳</div>
         <p className="text-sm text-ash">{t('allowance.notYetSub')}</p>
         <div className="flex gap-2">
           <button
@@ -93,10 +92,10 @@ export function AllowanceDialog({ cycle, onClose, onToast }: Props) {
         <p className="text-center text-sm text-ash">{t('allowance.arrived')}</p>
         <div className="flex gap-2">
           <button className={choice(true)} onClick={() => setArrived(true)}>
-            ✓ {t('allowance.yes')}
+            {t('allowance.yes')}
           </button>
           <button className={choice(false)} onClick={() => setArrived(false)}>
-            ✕ {t('allowance.no')}
+            {t('allowance.no')}
           </button>
         </div>
       </div>
@@ -109,10 +108,10 @@ export function AllowanceDialog({ cycle, onClose, onToast }: Props) {
         <p className="text-center text-sm text-ash">{t('allowance.same')}</p>
         <div className="flex gap-2">
           <button className={choice(true)} onClick={() => setSame(true)}>
-            = {t('allowance.sameYes')}
+            {t('allowance.sameYes')}
           </button>
           <button className={choice(false)} onClick={() => setSame(false)}>
-            ⇄ {t('allowance.sameNo')}
+            {t('allowance.sameNo')}
           </button>
         </div>
         <button
@@ -131,7 +130,7 @@ export function AllowanceDialog({ cycle, onClose, onToast }: Props) {
       {same && (
         <div className="rounded-xl border border-white/10 bg-white/4 px-4 py-3 text-center">
           <div className="label mb-1">{t('settings.allowance')}</div>
-          <div className="font-display text-3xl text-bone tabular">{money(cycle.allowance)}</div>
+          <div className="text-3xl font-semibold text-bone tabular">{money(cycle.allowance)}</div>
         </div>
       )}
 
@@ -142,7 +141,7 @@ export function AllowanceDialog({ cycle, onClose, onToast }: Props) {
             <input
               type="number"
               inputMode="decimal"
-              className="input pe-16 text-end font-display text-2xl"
+              className="input pe-16 text-end text-2xl font-semibold"
               value={amount}
               min={1}
               autoFocus
@@ -158,7 +157,7 @@ export function AllowanceDialog({ cycle, onClose, onToast }: Props) {
         </div>
       )}
 
-      {error && <div className="text-sm text-crimson-hi">⚠ {error}</div>}
+      {error && <div className="text-sm text-crimson-hi">{error}</div>}
 
       <div className="flex gap-2">
         {back}

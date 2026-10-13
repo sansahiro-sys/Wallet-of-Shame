@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 
 export type IconName =
+  | 'wallet'
   | 'home'
   | 'ledger'
   | 'budgets'
@@ -11,8 +12,22 @@ export type IconName =
   | 'trash'
   | 'back'
   | 'check'
+  | 'sun'
+  | 'moon'
+  | 'download'
+  | 'upload'
+  | 'file'
+  | 'sparkle'
 
 const paths: Record<IconName, ReactNode> = {
+  // The Moneta mark: a geometric wallet — a rounded body with a card slot.
+  wallet: (
+    <>
+      <rect x="3" y="6" width="18" height="13" rx="2.5" />
+      <path d="M21 10.5V9a2 2 0 0 0-2-2H5" />
+      <path d="M21 10.5h-4a2 2 0 0 0 0 4h4" />
+    </>
+  ),
   home: (
     <>
       <path d="M3 10.5 12 3l9 7.5" />
@@ -58,6 +73,39 @@ const paths: Record<IconName, ReactNode> = {
   ),
   back: <path d="M15 18l-6-6 6-6" />,
   check: <path d="M4 12.5l5.5 5.5L20 6" />,
+  sun: (
+    <>
+      <circle cx="12" cy="12" r="4.2" />
+      <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5 5l1.4 1.4M17.6 17.6 19 19M19 5l-1.4 1.4M6.4 17.6 5 19" />
+    </>
+  ),
+  moon: <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" />,
+  download: (
+    <>
+      <path d="M12 3v12" />
+      <path d="m7 11 5 5 5-5" />
+      <path d="M4 20h16" />
+    </>
+  ),
+  upload: (
+    <>
+      <path d="M12 21V9" />
+      <path d="m7 13 5-5 5 5" />
+      <path d="M4 4h16" />
+    </>
+  ),
+  file: (
+    <>
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+      <path d="M14 3v5h5" />
+    </>
+  ),
+  sparkle: (
+    <>
+      <path d="M12 3v6M12 15v6M3 12h6M15 12h6" />
+      <path d="m6.5 6.5 3 3M14.5 14.5l3 3M17.5 6.5l-3 3M9.5 14.5l-3 3" />
+    </>
+  ),
 }
 
 interface Props {
